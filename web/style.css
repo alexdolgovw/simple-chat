@@ -1,0 +1,101 @@
+html {
+    overflow-y: scroll;
+}
+
+body {
+    background: url("img/chat.jpg") no-repeat center fixed;
+    background-size: cover;
+}
+
+.chat-container {
+    width: 650px;
+    background: deepskyblue;
+    margin: 50px auto auto auto;
+    border-radius: 10px;
+}
+
+.top-menu-container {
+    background: darkblue;
+    height: 100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+}
+
+.top-menu-item {
+    font-size: 24px;
+    display: inline-block;
+    margin: auto;
+    color: white;
+    padding: 20px;
+}
+
+.top-menu-item a {
+    text-decoration: none;
+    color: white;
+}
+
+.top-menu-link :hover {
+    background-color: deepskyblue;
+    padding: 20px;
+}
+
+.top-menu-container p {
+    width: 80%;
+}
+
+#chatbox {
+    background-color: white;
+    width: 90%;
+    margin: 20px auto auto auto;
+    height: 400px;
+    overflow: auto;
+}
+
+input {
+    font-size: 24px;
+    background: #F6F6f6;
+    width: 80%;
+    height: 30px;
+    margin: 20px 0 20px 20px;
+    padding: 0;
+}
+
+.send-button {
+    padding: 0;
+    position: absolute;
+    top: 590px;
+    height: 35px;
+    margin: 0;
+    border-width: 0;
+    width: 100px;
+    background-color: darkblue;
+    color: white;
+}
+
+@media (max-width: 670px) {
+    .chat-container {
+        width: 100%;
+    }
+
+    body {
+        background-size: auto;
+    }
+
+    .send-button {
+        width: 60px;
+    }
+}
+
+@media (max-width: 560px) {
+    .top-menu-item {
+        font-size: 18px;
+    }
+    input {
+        width: 70%;
+    }
+
+}
+
