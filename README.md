@@ -1,5 +1,7 @@
 ### Simple WebSocket chat golang
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/delgus/simple-chat)](https://goreportcard.com/report/github.com/delgus/simple-chat)
+
 Возьмем стандартный [пример](https://github.com/golang-samples/websocket/tree/master/websocket-chat)
 
 И немножко его переделаем
