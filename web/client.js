@@ -1,5 +1,5 @@
 window.onload = function () {
-    let ws = new WebSocket("ws://" + document.location.host + "/entry");
+    let ws = new WebSocket("wss://" + document.location.host + "/entry");
     let chatbox = document.getElementById("chatbox");
 
     ws.onerror = function () {
