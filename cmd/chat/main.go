@@ -14,5 +14,5 @@ func main() {
 
 	// web client
 	http.Handle("/", http.FileServer(http.Dir("web")))
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":80", nil))
 }
