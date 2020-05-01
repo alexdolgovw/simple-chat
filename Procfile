@@ -1,1 +1,1 @@
-web: cmd/chat
+web: bin/chat
