@@ -14,7 +14,7 @@ test: ## Run unittests
 	@go test -race -short ./... -coverprofile=coverage.txt
 
 build: ## Build the binary file
-	@go build -a -o chatd -v $(PKG)/cmd/chat
+	@go build -a -o bin/chat -v $(PKG)/cmd/chat
 
 clean: ## Remove previous build
 	@rm -f chatd
