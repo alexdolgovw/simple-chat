@@ -3,14 +3,13 @@ package chat
 import (
 	"fmt"
 	"io"
-	"log"
 
-	"golang.org/x/net/websocket"
+	"github.com/gorilla/websocket"
 )
 
 var maxID int
 
-// Chat client.
+// Client - chat client.
 type Client struct {
 	id     int
 	ws     *websocket.Conn
@@ -19,7 +18,7 @@ type Client struct {
 	doneCh chan bool
 }
 
-// Create new chat client.
+// NewClient create new chat client.
 func NewClient(ws *websocket.Conn, server *Server) *Client {
 	if ws == nil {
 		panic("ws cannot be nil")
@@ -40,10 +39,7 @@ func NewClient(ws *websocket.Conn, server *Server) *Client {
 	}
 }
 
-func (c *Client) Conn() *websocket.Conn {
-	return c.ws
-}
-
+// Write sends message for client
 func (c *Client) Write(msg *Message) {
 	select {
 	case c.ch <- msg:
@@ -53,20 +49,14 @@ func (c *Client) Write(msg *Message) {
 	}
 }
 
-// Listen Write and Read request via channel
-func (c *Client) Listen() {
-	go c.listenWrite()
-	c.listenRead()
-}
-
 // Listen write request via channel
 func (c *Client) listenWrite() {
 	for {
 		select {
 		// send message to the client
 		case msg := <-c.ch:
-			if err := websocket.JSON.Send(c.ws, msg); err != nil {
-				log.Println(err)
+			if err := c.ws.WriteJSON(msg); err != nil {
+				c.server.Err(err)
 			}
 
 		// receive done request
@@ -91,7 +81,7 @@ func (c *Client) listenRead() {
 		// read data from websocket connection
 		default:
 			var msg Message
-			err := websocket.JSON.Receive(c.ws, &msg)
+			err := c.ws.ReadJSON(&msg)
 			if err == io.EOF {
 				c.doneCh <- true
 			} else if err != nil {
