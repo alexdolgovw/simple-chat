@@ -14,8 +14,7 @@ type Client struct {
 	id     int
 	ws     *websocket.Conn
 	server *Server
-	ch     chan *Message
-	doneCh chan bool
+	send   chan *Message
 }
 
 // NewClient create new chat client.
@@ -34,36 +33,24 @@ func NewClient(ws *websocket.Conn, server *Server) *Client {
 		id:     maxID,
 		ws:     ws,
 		server: server,
-		ch:     make(chan *Message),
-		doneCh: make(chan bool),
+		send:   make(chan *Message),
 	}
 }
 
-// Write sends message for client
-func (c *Client) Write(msg *Message) {
-	select {
-	case c.ch <- msg:
-	default:
-		c.server.Del(c)
-		c.server.Err(fmt.Errorf("client %d is disconnected", c.id))
-	}
+// Send message to client
+func (c *Client) Send(msg *Message) {
+	c.send <- msg
 }
 
-// Listen write request via channel
+// Listen read request via channel
 func (c *Client) listenWrite() {
-	for {
-		select {
-		// send message to the client
-		case msg := <-c.ch:
-			if err := c.ws.WriteJSON(msg); err != nil {
-				c.server.Err(err)
-			}
+	for msg := range c.send {
+		err := c.ws.WriteJSON(msg)
 
-		// receive done request
-		case <-c.doneCh:
+		if err != nil {
 			c.server.Del(c)
-			c.doneCh <- true // for listenRead method
-			return
+			c.server.Err(err)
+			break
 		}
 	}
 }
@@ -71,25 +58,19 @@ func (c *Client) listenWrite() {
 // Listen read request via channel
 func (c *Client) listenRead() {
 	for {
-		select {
-		// receive done request
-		case <-c.doneCh:
-			c.server.Del(c)
-			c.doneCh <- true // for listenWrite method
-			return
+		var msg Message
+		err := c.ws.ReadJSON(&msg)
 
-		// read data from websocket connection
-		default:
-			var msg Message
-			err := c.ws.ReadJSON(&msg)
-			if err == io.EOF {
-				c.doneCh <- true
-			} else if err != nil {
-				c.server.Err(err)
-			} else {
-				msg.Author = fmt.Sprintf("client_id_%d", c.id)
-				c.server.SendAll(&msg)
-			}
+		if err == io.EOF {
+			c.server.Del(c)
+			break
+		} else if err != nil {
+			c.server.Err(err)
+			c.server.Del(c)
+			break
+		} else {
+			msg.Author = fmt.Sprintf("client_%d", c.id)
+			c.server.broadcast <- &msg
 		}
 	}
 }

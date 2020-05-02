@@ -16,7 +16,8 @@ func main() {
 	}
 
 	// websocket server
-	server := chat.NewServer("/entry")
+	server := chat.NewServer()
+	http.Handle("/entry", server)
 	go server.Listen()
 
 	// web client
