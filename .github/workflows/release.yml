@@ -1,8 +1,9 @@
 name: deploy
 on:
   push:
-    branches:
+    branches: 
       - master
+
 jobs:
   release:
     runs-on: ubuntu-latest
