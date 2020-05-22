@@ -33,5 +33,5 @@ jobs:
         script: | 
           docker pull delgus/simple-chat
           docker rm --force simple-chat  
-          docker run --name=jokebot -d -e PORT=${{ secrets.PORT }} -p ${{ secrets.DEPLOY_PORT }}:80 delgus/simple-chat
+          docker run --name=simple-chat -d -e PORT=${{ secrets.PORT }} -p ${{ secrets.DEPLOY_PORT }}:80 delgus/simple-chat
           
