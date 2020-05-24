@@ -19,11 +19,14 @@ jobs:
       run: make dep
       
     - name: install golangci-lint
-      run: curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.21.0
+      run: curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.27.0
 
-    - name: golangci-lint
+    - name: run linter
       run: $(go env GOPATH)/bin/golangci-lint run
 
+    - name: build
+      run: make build
+      
     - uses: docker/build-push-action@v1 
       with:
         username: ${{ secrets.DOCKER_USERNAME }}

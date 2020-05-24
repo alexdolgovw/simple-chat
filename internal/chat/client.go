@@ -64,10 +64,12 @@ func (c *Client) listenWrite() {
 		select {
 		case msg := <-c.send:
 
-			c.ws.SetWriteDeadline(time.Now().Add(writeWait))
+			err := c.ws.SetWriteDeadline(time.Now().Add(writeWait))
+			if err != nil {
+				c.server.Err(err)
+			}
 
-			err := c.ws.WriteJSON(msg)
-
+			err = c.ws.WriteJSON(msg)
 			if err != nil {
 				c.server.Del(c)
 				c.server.Err(err)
@@ -75,7 +77,11 @@ func (c *Client) listenWrite() {
 			}
 
 		case <-ticker.C:
-			c.ws.SetWriteDeadline(time.Now().Add(writeWait))
+			err := c.ws.SetWriteDeadline(time.Now().Add(writeWait))
+			if err != nil {
+				c.server.Err(err)
+			}
+
 			if err := c.ws.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
 				return
 			}
@@ -86,9 +92,15 @@ func (c *Client) listenWrite() {
 // Listen read request via channel
 func (c *Client) listenRead() {
 	// thx https://stackoverflow.com/questions/37696527/go-gorilla-websockets-on-ping-pong-fail-user-disconnct-call-function
-	c.ws.SetReadDeadline(time.Now().Add(pongWait))
+	err := c.ws.SetReadDeadline(time.Now().Add(pongWait))
+	if err != nil {
+		c.server.Err(err)
+	}
+
 	c.ws.SetPongHandler(func(string) error {
-		c.ws.SetReadDeadline(time.Now().Add(pongWait))
+		if err := c.ws.SetReadDeadline(time.Now().Add(pongWait)); err != nil {
+			c.server.Err(err)
+		}
 		return nil
 	})
 
