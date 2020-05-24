@@ -22,5 +22,8 @@ clean: ## Remove previous build
 bench: ## Benchmark for code
 	@go test ./... -bench=. -benchmem
 
+dep: ## Get dependencies
+	@go mod vendor
+
 help: ## Display this help screen
 	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
