@@ -2,7 +2,7 @@ name: go-mod-tidy-pr
 
 on:
   schedule:
-    - cron: "0 14 * * *"
+    - cron: "40 14 * * *"
 
 jobs:
   go-mod-tidy-pr:
