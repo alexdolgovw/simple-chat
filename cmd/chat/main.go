@@ -9,12 +9,6 @@ import (
 )
 
 func main() {
-	// load environments
-	cfg, err := loadConfig()
-	if err != nil {
-		logrus.Fatal(err)
-	}
-
 	// websocket server
 	server := chat.NewServer()
 	http.Handle("/entry", server)
@@ -25,6 +19,5 @@ func main() {
 
 	logrus.Info("application server start...")
 
-	addr := fmt.Sprintf(`%s:%d`, cfg.Host, cfg.Port)
-	logrus.Fatal(http.ListenAndServe(addr, nil))
+	logrus.Fatal(http.ListenAndServe(":80", nil))
 }
