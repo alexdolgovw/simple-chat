@@ -31,13 +31,10 @@ jobs:
         repository: delgus/simple-chat
         tags: latest
       
-    - uses: appleboy/ssh-action@v0.0.9
+    - uses: sagebind/docker-swarm-deploy-action@v2
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        password: ${{ secrets.PSW }}
-        script: | 
-          docker pull delgus/simple-chat
-          docker rm --force simple-chat  
-          docker run --name=simple-chat -d -e PORT=${{ secrets.PORT }} -p ${{ secrets.DEPLOY_PORT }}:80 delgus/simple-chat
+        remote_host: tcp://${{ secrets.DOCKER_HOST }}:2376
+        args: stack deploy -c deploy.yml simple-chat
+      env:
+        DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}  
           
