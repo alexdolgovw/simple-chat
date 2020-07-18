@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  dialogflow-tg-bot:
+  simple-chat:
     image: delgus/simple-chat
     ports:
       - ${DEPLOY_PORT}:80
