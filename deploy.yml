@@ -4,6 +4,7 @@ services:
     image: delgus/simple-chat
     environment:
       - VIRTUAL_HOST=${VIRTUAL_HOST}
+      - LETSENCRYPT_HOST=${VIRTUAL_HOST}
     deploy:
       replicas: 1
       update_config:
