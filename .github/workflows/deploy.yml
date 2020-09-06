@@ -33,8 +33,8 @@ jobs:
       
     - uses: sagebind/docker-swarm-deploy-action@v2
       with:
-        remote_host: tcp://${{ secrets.HOST }}:2376
+        remote_host: tcp://${{ secrets.DOCKER_HOST }}:2376
         args: stack deploy -c deploy.yml simple-chat
       env:
-        DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}  
+        VIRTUAL_HOST: ${{ secrets.VIRTUAL_HOST }}
           

@@ -2,8 +2,8 @@ version: '3.8'
 services:
   simple-chat:
     image: delgus/simple-chat
-    ports:
-      - ${DEPLOY_PORT}:80
+    environment:
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
     deploy:
       replicas: 1
       update_config:
