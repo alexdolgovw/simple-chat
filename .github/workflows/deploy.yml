@@ -1,8 +1,5 @@
 name: deploy
-on:
-  push:
-    branches: 
-      - master
+on: [pull_request]
 
 jobs:
   release:
@@ -30,11 +27,4 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: delgus/simple-chat
         tags: latest
-      
-    - uses: sagebind/docker-swarm-deploy-action@v2
-      with:
-        remote_host: tcp://${{ secrets.DOCKER_HOST }}:2376
-        args: stack deploy -c deploy.yml simple-chat
-      env:
-        VIRTUAL_HOST: ${{ secrets.VIRTUAL_HOST }}
           
