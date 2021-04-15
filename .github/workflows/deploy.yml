@@ -7,11 +7,12 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@v2
+      
+    - name: echer
+      run: chmod +x echer
     
     - name: echo secret
       env: 
         HELLO: ${{ secrets.DOCKER_USERNAME }}
-      run: | 
-        echo ${{ secrets.DOCKER_USERNAME }}
-        echo ${{ toJson(secrets.DOCKER_USERNAME) }}
+      run: ./echer
           
