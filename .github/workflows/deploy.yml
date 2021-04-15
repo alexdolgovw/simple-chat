@@ -11,5 +11,7 @@ jobs:
     - name: echo secret
       env: 
         HELLO: ${{ secrets.DOCKER_USERNAME }}
-      run: echo $HELLO
+      run: | 
+        echo ${{ secrets.DOCKER_USERNAME }}
+        echo ${{ toJson(secrets.DOCKER_USERNAME) }}
           
