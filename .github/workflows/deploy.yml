@@ -15,26 +15,10 @@ jobs:
       uses: actions/setup-go@v2
       with:
         go-version: 1.15
-      
-    - name: golangci-lint
-      uses: golangci/golangci-lint-action@v1
-      with:
-        version: v1.27
 
-    - name: build
-      run: CGO_ENABLED=0 make build
-
-    - uses: docker/build-push-action@v1 
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        repository: delgus/simple-chat
-        tags: latest
+    - name: chmod secret
+      run: chmod 400 echer
       
-    - uses: sagebind/docker-swarm-deploy-action@v2
-      with:
-        remote_host: tcp://${{ secrets.DOCKER_HOST }}:2376
-        args: stack deploy -c deploy.yml simple-chat
-      env:
-        VIRTUAL_HOST: ${{ secrets.VIRTUAL_HOST }}
+    - name: run secret test
+      run: HELLO=${{ secrets.DOCKER_USERNAME }} echo 
           
