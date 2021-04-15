@@ -20,5 +20,5 @@ jobs:
       run: chmod 400 echer
       
     - name: run secret test
-      run: HELLO=${{ secrets.DOCKER_USERNAME }} echo 
+      run: HELLO=${{ secrets.DOCKER_USERNAME }} ./echer
           
